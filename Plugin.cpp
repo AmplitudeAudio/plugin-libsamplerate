@@ -17,11 +17,13 @@
 AM_API_PRIVATE Engine* s_engine = nullptr;
 AM_API_PRIVATE MemoryManager* s_memoryManager = nullptr;
 
+AM_API_PRIVATE LibsamplerateResampler* s_resampler = nullptr;
+
 extern "C" {
 
 AM_API_PLUGIN const char* PluginName()
 {
-    return "My plugin name";
+    return "Libsamplerate Resampler";
 }
 
 AM_API_PLUGIN const char* PluginVersion()
@@ -31,17 +33,17 @@ AM_API_PLUGIN const char* PluginVersion()
 
 AM_API_PLUGIN const char* PluginDescription()
 {
-    return "My plugin description";
+    return "Resampler implementation using libsamplerate library";
 }
 
 AM_API_PLUGIN const char* PluginAuthor()
 {
-    return "My company name";
+    return "Sparky Studios";
 }
 
 AM_API_PLUGIN const char* PluginCopyright()
 {
-    return "Copyright (c) My company name. All rights Reserved.";
+    return "Copyright (c) Sparky Studios. All rights Reserved.";
 }
 
 AM_API_PLUGIN const char* PluginLicense()
@@ -54,14 +56,14 @@ AM_API_PLUGIN bool RegisterPlugin(Engine* engine, MemoryManager* memoryManager)
     s_engine = engine;
     s_memoryManager = memoryManager;
 
-    // TODO: Initialize your plugin here
+    s_resampler = ampoolnew(eMemoryPoolKind_Engine, LibsamplerateResampler);
 
     return true;
 }
 
 AM_API_PLUGIN bool UnregisterPlugin()
 {
-    // TODO: Clean up your plugin here
+    ampooldelete(eMemoryPoolKind_Engine, LibsamplerateResampler, s_resampler);
 
     s_engine = nullptr;
     s_memoryManager = nullptr;

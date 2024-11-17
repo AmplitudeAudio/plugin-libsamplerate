@@ -16,11 +16,19 @@ cmake_minimum_required(VERSION 3.20)
 
 cmake_policy(SET CMP0048 NEW)
 
-list(APPEND CMAKE_MODULE_PATH "$ENV{AM_SDK_PATH}/cmake" "${AM_SDK_PATH}/cmake")
-list(APPEND CMAKE_PREFIX_PATH "$ENV{AM_SDK_PATH}/cmake" "${AM_SDK_PATH}/cmake")
+if (DEFINED ENV{AM_SDK_PATH})
+    string(REPLACE "\\" "/" ENV_AM_SDK_PATH $ENV{AM_SDK_PATH})
+    if (NOT DEFINED AM_SDK_PATH)
+        set(AM_SDK_PATH "${ENV_AM_SDK_PATH}" CACHE PATH "")
+    endif ()
+endif ()
 
-# TODO: Replace this project name with the identifier of your plugin
-project(PluginIdentifier)
+if (DEFINED AM_SDK_PATH)
+    list(APPEND CMAKE_MODULE_PATH "${AM_SDK_PATH}/cmake")
+    list(APPEND CMAKE_PREFIX_PATH "${AM_SDK_PATH}/cmake")
+endif ()
+
+project(AmplitudeLibsamplerateResamplerPlugin)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -45,8 +53,7 @@ endif()
 
 # Setup Plugin dependencies
 # ------------------------------------------------------------------------------
-# TODO: Initialize your plugin dependecies here if needed. This is usually the set of 
-# `find_package` calls to 3rd party libraries.
+find_package(SampleRate CONFIG REQUIRED)
 
 # Setup Amplitude
 # ------------------------------------------------------------------------------
@@ -59,22 +66,21 @@ find_package(AmplitudeAudioSDK REQUIRED)
 set(PLUGIN_SOURCE
     Plugin.h
     Plugin.cpp
-    # TODO: Add your other source files here
+    Resampler.h
+    Resampler.cpp
 )
 
 # Includes
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${AM_SDK_PATH}/include
-    # TODO: Add you other include directories here
 )
 
 add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCE})
 target_compile_definitions(${PROJECT_NAME} PRIVATE AM_BUILDSYSTEM_BUILDING_PLUGIN)
 
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE SparkyStudios::Audio::Amplitude::SDK::Shared
-    # TODO: Add your other libraries to link here
+    PRIVATE SparkyStudios::Audio::Amplitude::SDK::Shared SampleRate::samplerate
 )
 
 # Install

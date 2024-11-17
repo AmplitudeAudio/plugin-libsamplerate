@@ -14,11 +14,11 @@
 
 #pragma once
 
-#ifndef _AM_PLUGIN_TEMPLATE_H
-#define _AM_PLUGIN_TEMPLATE_H
+#ifndef _AM_PLUGIN_LIBSAMPLERATE_PLUGIN_H
+#define _AM_PLUGIN_LIBSAMPLERATE_PLUGIN_H
 
-#include <SparkyStudios/Audio/Amplitude/Amplitude.h>
+#include <Resampler.h>
 
 using namespace SparkyStudios::Audio::Amplitude;
 
-#endif // _AM_PLUGIN_TEMPLATE_H
+#endif // _AM_PLUGIN_LIBSAMPLERATE_PLUGIN_H
