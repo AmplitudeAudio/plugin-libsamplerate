@@ -121,9 +121,7 @@ namespace SparkyStudios::Audio::Amplitude
             : Resampler("libsamplerate")
         {}
 
-        ResamplerInstance* CreateInstance() override;
-
-        void DestroyInstance(ResamplerInstance* instance) override;
+        std::shared_ptr<ResamplerInstance> CreateInstance() override;
     };
 } // namespace SparkyStudios::Audio::Amplitude
 
